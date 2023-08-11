@@ -1,0 +1,56 @@
+Libraries that are needed to be installed:
+flask
+flask-restx
+flask_sqlalchemy
+flask_migrate
+flask_jwt_extended
+flask_cors
+decouple
+
+pip install flask flask-restx flask_sqlalchemy flask_migrate flask_jwt_extended flask_cors decouple 
+
+
+.env:
+This file holds environment variables used by  application, such as the SECRET_KEY used for encrypting sessions and tokens and the SQLALCHEMY_TRACK_MODIFICATIONS flag to control SQLAlchemy's change tracking behavior.
+
+
+app.py:
+This is the main Flask application file.
+It initializes the Flask app, sets up configuration, connects to the database using SQLAlchemy, adds JWT authentication, registers namespaces for different API endpoints, and defines a shell context for database interaction.
+
+
+exts.py:
+This file initializes the SQLAlchemy database extension.
+
+
+models.py:
+This file defines the database models for your application.
+The User model represents user data, including id, username, email, and password.
+
+
+run.py:
+This script is used to run the application.
+It imports the create_app function from app.py, initializes the app with a specific configuration, and starts the development server.
+
+
+test_api.py:
+This file contains unit tests for your application's API endpoints.
+It sets up a test environment using a different configuration and Flask test client, and then defines test cases for sign-up and login routes.
+
+
+auth.py
+This module handles user authentication and authorization. It provides endpoints for user signup, login, and token refresh using Flask-RESTx.
+signup_model and login_model: These are models defined using Flask-RESTx's fields to specify the expected JSON payload for user signup and login.
+return_response: This is a utility function to create a consistent JSON response with a specified message, status code, data, and username.
+@auth_ns.route('/signup'): This decorator defines an endpoint for user signup. When a POST request is made to this endpoint with valid JSON data (username, email, and password), the server checks if the user already exists, creates a new user object, hashes the password, and saves it to the database.
+@auth_ns.route('/login'): This decorator defines an endpoint for user login. When a POST request is made with valid JSON data (username and password), the server retrieves the user from the database, verifies the password, and if successful, generates an access token and a refresh token using Flask-JWT-Extended.
+@auth_ns.route('/refresh'): This decorator defines an endpoint for token refresh. It requires a valid refresh token (obtained during login) and generates a new access token.
+
+
+upload.py
+This module handles image upload and processing. It provides endpoints for uploading an image, applying the Hough Transform algorithm for line detection, and retrieving the predicted image.
+upload_model: This model specifies the expected JSON payload for image upload.
+predict_image(image_np): This function applies the Hough Transform algorithm to detect lines in an input image (NumPy array) and returns the processed image.
+@upload_ns.route('/submit'): This decorator defines an endpoint for image submission. When a POST request is made with an image file attached, the server saves the image to the user's specific folder, applies the Hough Transform, and saves the processed image.
+ the jwt_required decorator is used to protect certain routes or endpoints. It ensures that the client making a request to that endpoint must provide a valid JWT token in the request headers to access the protected resource.
+@upload_ns.route('/predict'): This decorator defines an endpoint for retrieving the latest predicted image. When a GET request is made, the server searches for the latest predicted image in the user's folder, encodes it in base64, and returns it in the response.
