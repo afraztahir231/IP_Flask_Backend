@@ -33,7 +33,7 @@ def return_response(message, status_code, data=None, username=None):
     response = {
         "message": message,
         "data": data,
-        "username": username
+        "username": username,
     }
     return make_response(jsonify(response), status_code)
 
@@ -78,7 +78,7 @@ class Login(Resource):
         if db_user and check_password_hash(db_user.password,password):
             access_token=create_access_token(identity=db_user.username)
             refresh_token=create_refresh_token(identity=db_user.username)
-            return return_response("Login successful", 200, {"access_token": access_token, "refresh_token": refresh_token}, username=username)
+            return jsonify({"message" : "Login successful", "status_code" : "200", "data" : {"access_token": access_token, "refresh_token": refresh_token}, "username" : username})
 
 #creates a new access taken
 #it requires the refresh token that we acquire when we log in
